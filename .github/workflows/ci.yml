@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout the repo
+    - name: Checkout
+      uses: actions/checkout@v4
+    # install terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false # TODO: figure out what this is for
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format
+      run: terraform fmt -recursive -check
+
+    - name: Terraform Plan
+      run: terraform plan
