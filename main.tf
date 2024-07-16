@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: MPL-2.0
 
 terraform {
+  backend "s3" {
+    bucket = "sam-carlsen-terraform-state"
+    key    = "LearnTerraformGithubActions/LearnTerraformGithubActions.tfstate"
+    region = "us-west-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,7 +21,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = "us-west-1"
 }
 
 resource "random_pet" "sg" {}
