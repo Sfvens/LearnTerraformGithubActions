@@ -1,0 +1,48 @@
+name: CD
+
+on:
+  pull_request:
+    branches:
+    - main
+
+permissions:
+  id-token: write
+  contents: read # not sure I need this
+
+jobs:
+
+  terraform-apply:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # configure credentials
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-west-1
+        role-to-assume: arn:aws:iam::211125428779:role/GitHub_Actions
+        role-session-name: gha-session
+
+    # checkout the repo
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # install terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format
+      run: terraform fmt -recursive -check
+
+    - name: Terraform Plan
+      run: terraform plan -out tfplan
+
+    - name: Terraform Apply
+      run: terraform apply tfplan
