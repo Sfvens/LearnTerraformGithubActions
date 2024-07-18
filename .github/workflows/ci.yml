@@ -20,7 +20,7 @@ jobs:
     - uses: dorny/paths-filter@v3
       id: changes
       with:
-        filters: | # purposefully exclude README and License
+        filters: | # purposefully exclude README and LICENSE
           top-level-directory:
             - '.github/**'
             - '.terraform/**'
