@@ -8,14 +8,13 @@ on:
 permissions:
   id-token: write
   contents: read # not sure I need this
+  pull-requests: read
 
 jobs:
 
   terraform-plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
 
     steps:
     - uses: dorny/paths-filter@v3
