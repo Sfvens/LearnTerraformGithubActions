@@ -11,19 +11,6 @@ permissions:
 
 jobs:
 
-  # aws-credentials:
-  #   name: 'AWS Credentials'
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: Get and Store Credentials
-  #     # get the correct credentials
-  #       # use long term creds in github
-  #       # then retrieve short terms
-  #     # store short terms on %USERPROFILE%.aws\credentials
-  #     run: |
-  #       echo 'something here'
-
   terraform-plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
@@ -41,6 +28,7 @@ jobs:
     # checkout the repo
     - name: Checkout
       uses: actions/checkout@v4
+
     # install terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
