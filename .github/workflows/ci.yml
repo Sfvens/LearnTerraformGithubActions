@@ -16,6 +16,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: dorny/paths-filter@v3
+      id: changes
+      with:
+        filters: | # purposefully exclude README and License
+          top-level-directory:
+            - '.github/**'
+            - '.terraform/**'
+            - '.gitignore'
+            - 'main.tf'
 
     # configure credentials
     - name: Configure AWS Credentials
@@ -35,11 +44,10 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: Terraform Init
-      run: terraform init
+    - if: steps.changes.outputs.top-level-directory == 'true'
+      name: Terraform
+      run: |
+        terraform init
+        terraform fmt -recursive -check
+        terraform plan
 
-    - name: Terraform Format
-      run: terraform fmt -recursive -check
-
-    - name: Terraform Plan
-      run: terraform plan
