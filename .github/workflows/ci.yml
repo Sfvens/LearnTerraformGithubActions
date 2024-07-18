@@ -45,7 +45,7 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - if: steps.changes.outputs.top-level-directory == 'true'
+    - if: ${{ steps.changes.outputs.top-level-directory == 'true' }}
       name: Terraform
       run: |
         terraform init
