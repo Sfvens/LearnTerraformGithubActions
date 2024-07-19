@@ -23,7 +23,6 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           top-level-directory:
             - '.github/**'
-            - '.terraform/**'
             - '.gitignore'
             - 'main.tf'
 
@@ -45,7 +44,7 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - if: ${{ steps.changes.outputs.top-level-directory == 'true' }}
+    - if: steps.changes.outputs.top-level-directory == 'true'
       name: Terraform
       run: |
         terraform init
