@@ -7,7 +7,8 @@ on:
 
 jobs:
 
-  changes:
+  path-filter:
+    name: Setup Path Filter
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -20,11 +21,12 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           terraform:
             - 'main.tf'
+    
 
   terraform-plan:
     name: 'Terraform Plan'
-    needs: [changes]
-    if: ${{ needs.changes.outputs.terraform == 'true'}}
+    needs: [path-filter]
+    if: ${{ needs.path-filter.outputs.terraform == 'true'}}
     runs-on: ubuntu-latest
 
     steps:
