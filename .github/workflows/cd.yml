@@ -29,6 +29,10 @@ jobs:
     if: ${{ needs.path-filter.outputs.terraform == 'true'}}
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
 
     # configure credentials
