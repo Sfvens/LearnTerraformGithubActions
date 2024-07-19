@@ -7,7 +7,8 @@ on:
 
 jobs:
 
-  changes:
+  path-filter:
+    name: Setup Path Filter
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -20,11 +21,12 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           terraform:
             - 'main.tf'
+    
 
   terraform-plan:
     name: 'Terraform Plan'
-    needs: [changes]
-    if: ${{ needs.changes.outputs.terraform == 'true'}}
+    needs: [path-filter]
+    if: ${{ needs.path-filter.outputs.terraform == 'true'}}
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +38,6 @@ jobs:
         aws-region: us-west-1
         role-to-assume: arn:aws:iam::211125428779:role/GitHub_Actions
         role-session-name: gha-session
-
     # checkout the repo
     - name: Checkout
       uses: actions/checkout@v4
