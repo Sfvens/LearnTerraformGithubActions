@@ -1,18 +1,32 @@
-name: CD
+name: CI
 
 on:
   push:
     branches:
     - main
 
-permissions:
-  id-token: write
-  contents: read # not sure I need this
-
 jobs:
+
+  path-filter:
+    name: Setup Path Filter
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      terraform: ${{ steps.filter.outputs.terraform }}
+    steps:
+    - uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: | # purposefully exclude README and LICENSE
+          terraform:
+            - 'main.tf'
+    
 
   terraform-apply:
     name: 'Terraform Apply'
+    needs: [path-filter]
+    if: ${{ needs.path-filter.outputs.terraform == 'true'}}
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +49,7 @@ jobs:
       with:
         terraform_wrapper: false
 
+    # run terraform
     - name: Terraform Init
       run: terraform init
 

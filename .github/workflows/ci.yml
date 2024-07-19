@@ -38,6 +38,7 @@ jobs:
         aws-region: us-west-1
         role-to-assume: arn:aws:iam::211125428779:role/GitHub_Actions
         role-session-name: gha-session
+
     # checkout the repo
     - name: Checkout
       uses: actions/checkout@v4
