@@ -44,15 +44,18 @@ jobs:
     # configure credentials
     - name: Configure AWS Credentials (stg)
       if: ${{ env.targetBranch == 'dev' || env.targetBranch == 'stg' }}
+      env:
+        workingDirectory: ./terraform/stg
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
         role-to-assume: ${{ env.stgRole }}
         role-session-name: gha-session
-        
 
     - name: Configure AWS Credentials (prd)
       if: ${{ env.targetBranch == 'prd' }}
+      env:
+        workingDirectory: ./terraform/prd
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
@@ -71,10 +74,13 @@ jobs:
 
     # run terraform
     - name: Terraform Init
+      working-directory: ${{ env.workingDirectory }}
       run: terraform init
 
     - name: Terraform Format
+      working-directory: ${{ env.workingDirectory }}
       run: terraform fmt -recursive -check
 
     - name: Terraform Plan
+      working-directory: ${{ env.workingDirectory }}
       run: terraform plan
