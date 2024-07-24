@@ -8,6 +8,7 @@ on:
     - prd
 
 env:
+  targetBranch: ${{ github.event.pull_request.base.ref }}
   stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
   prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
 
@@ -43,16 +44,16 @@ jobs:
 
     # configure credentials
     - name: Configure AWS Credentials (stg)
-      if: ${{ github.ref_name == 'dev' || github.ref_name == 'stg' }}
+      if: ${{ env.targetBranch == 'dev' || env.targetBranch == 'stg' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
-        role-to-assume: ${{ env.testRole }}
+        role-to-assume: ${{ env.stgRole }}
         role-session-name: gha-session
         
 
     - name: Configure AWS Credentials (prd)
-      if: ${{ github.ref_name == 'main' }}
+      if: ${{ env.targetBranch == 'prd' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
