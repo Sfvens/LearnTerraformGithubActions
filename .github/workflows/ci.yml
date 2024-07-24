@@ -76,7 +76,7 @@ jobs:
     - name: Terraform Init
       working-directory: ${{ env.workingDirectory }}
       run: |
-        echo ${{ env.workingDirectory }}
+        echo ${{ env.targetBranch }}
         terraform init
 
     - name: Terraform Format
