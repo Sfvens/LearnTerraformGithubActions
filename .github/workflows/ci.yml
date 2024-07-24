@@ -44,23 +44,23 @@ jobs:
     # configure credentials
     - name: Configure AWS Credentials (stg)
       if: ${{ env.targetBranch == 'dev' || env.targetBranch == 'stg' }}
-      env:
-        workingDirectory: ./terraform/stg
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
         role-to-assume: ${{ env.stgRole }}
         role-session-name: gha-session
+      env:
+        workingDirectory: ./terraform/stg
 
     - name: Configure AWS Credentials (prd)
       if: ${{ env.targetBranch == 'prd' }}
-      env:
-        workingDirectory: ./terraform/prd
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
         role-to-assume: ${{ env.prdRole }}
         role-session-name: gha-session
+      env:
+        workingDirectory: ./terraform/prd
 
     # checkout the repo
     - name: Checkout
