@@ -27,8 +27,7 @@ jobs:
       with:
         filters: | # purposefully exclude README and LICENSE
           terraform:
-            - 'main.tf'
-    
+            - 'terraform/**'
 
   terraform-plan:
     name: 'Terraform Plan'
