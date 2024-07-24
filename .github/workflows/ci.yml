@@ -3,7 +3,12 @@ name: CI
 on:
   pull_request:
     branches:
+    - dev
     - main
+
+env:
+  devRole: arn:aws:iam::851725514822:role/GitHub_Actions
+  prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
 
 jobs:
 
@@ -36,11 +41,21 @@ jobs:
     steps:
 
     # configure credentials
-    - name: Configure AWS Credentials
+    - name: Configure AWS Credentials (dev)
+      if: ${{ github.ref_name == 'dev' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
-        role-to-assume: arn:aws:iam::211125428779:role/GitHub_Actions
+        role-to-assume: ${{ env.devRole }}
+        role-session-name: gha-session
+        
+
+    - name: Configure AWS Credentials (prd)
+      if: ${{ github.ref_name == 'main' }}
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-west-1
+        role-to-assume: ${{ env.prdRole }}
         role-session-name: gha-session
 
     # checkout the repo
