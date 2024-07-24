@@ -88,5 +88,5 @@ jobs:
     - name: Terraform Plan
       working-directory: ${{ env.workingDirectory }}
       run: |
-        echo ${{ env.workingDirectory }}
+        env
         terraform plan
