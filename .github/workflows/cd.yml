@@ -25,8 +25,7 @@ jobs:
         base: ${{ github.ref }}
         filters: | # purposefully exclude README and LICENSE
           terraform:
-            - 'main.tf'
-    
+            - 'terraform/**'
 
   terraform-apply:
     name: 'Terraform Apply'
@@ -43,6 +42,8 @@ jobs:
     # configure credentials
     - name: Configure AWS Credentials (stg)
       if: ${{ github.ref_name == 'stg' }}
+      env:
+        workingDirectory: ./terraform/stg
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
@@ -52,6 +53,8 @@ jobs:
 
     - name: Configure AWS Credentials (prd)
       if: ${{ github.ref_name == 'prd' }}
+      env:
+        workingDirectory: ./terraform/prd
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
@@ -70,13 +73,17 @@ jobs:
 
     # run terraform
     - name: Terraform Init
+      working-directory: ${{ env.workingDirectory }}
       run: terraform init
 
     - name: Terraform Format
+      working-directory: ${{ env.workingDirectory }}
       run: terraform fmt -recursive -check
 
     - name: Terraform Plan
+      working-directory: ${{ env.workingDirectory }}
       run: terraform plan -out tfplan
 
     - name: Terraform Apply
+      working-directory: ${{ env.workingDirectory }}
       run: terraform apply tfplan
