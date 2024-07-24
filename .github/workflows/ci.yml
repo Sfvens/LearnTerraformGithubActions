@@ -75,12 +75,18 @@ jobs:
     # run terraform
     - name: Terraform Init
       working-directory: ${{ env.workingDirectory }}
-      run: terraform init
+      run: |
+        echo ${{ env.workingDirectory }}
+        terraform init
 
     - name: Terraform Format
       working-directory: ${{ env.workingDirectory }}
-      run: terraform fmt -recursive -check
+      run: |
+        echo ${{ env.workingDirectory }}
+        terraform fmt -recursive -check
 
     - name: Terraform Plan
       working-directory: ${{ env.workingDirectory }}
-      run: terraform plan
+      run: |
+        echo ${{ env.workingDirectory }}
+        terraform plan
