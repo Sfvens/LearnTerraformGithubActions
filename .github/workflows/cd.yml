@@ -8,8 +8,6 @@ on:
 
 env:
   workingDirectory: ${{ github.ref_name == 'prd' && './terraform/prd' || './terraform/stg'}} # else block is stg, that's ok because only stg and prd trigger the workflow
-  stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
-  prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
 
 jobs:
 
@@ -46,7 +44,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
-        role-to-assume: ${{ env.stgRole }}
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN_STG }}
         role-session-name: gha-session
         
 
@@ -55,7 +53,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
-        role-to-assume: ${{ env.prdRole }}
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN_PRD }}
         role-session-name: gha-session
 
     # checkout the repo
