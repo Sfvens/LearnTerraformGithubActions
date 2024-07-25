@@ -8,7 +8,7 @@ on:
     - prd
 
 env:
-  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && 'stg' || github.event.pull_request.base.ref == 'stg' && 'stg' || 'prd'}}
+  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && './terraform/stg' || github.event.pull_request.base.ref == 'stg' && './terraform/stg' || './terraform/prd'}}
   targetBranch: ${{ github.event.pull_request.base.ref }}
   stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
   prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
@@ -44,8 +44,6 @@ jobs:
 
     # configure credentials
     - name: Configure AWS Credentials (stg)
-      env:
-        workingDirectory: ./terraform/stg
       if: ${{ env.targetBranch == 'dev' || env.targetBranch == 'stg' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -54,8 +52,6 @@ jobs:
         role-session-name: gha-session
 
     - name: Configure AWS Credentials (prd)
-      env:
-        workingDirectory: ./terraform/prd
       if: ${{ env.targetBranch == 'prd' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
