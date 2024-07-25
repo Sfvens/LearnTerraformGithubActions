@@ -8,6 +8,7 @@ on:
     - prd
 
 env:
+  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && 'stg' || github.event.pull_request.base.ref == 'stg' && 'stg' || 'prd'}}
   targetBranch: ${{ github.event.pull_request.base.ref }}
   stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
   prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
@@ -78,7 +79,7 @@ jobs:
     - name: Terraform Init
       working-directory: ${{ env.workingDirectory }}
       run: |
-        echo ${{ env.targetBranch }}
+        
         terraform init
 
     - name: Terraform Format
