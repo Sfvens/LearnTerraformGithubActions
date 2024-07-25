@@ -25,7 +25,7 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           terraform:
             - 'terraform/**'
-            - 'workflows/**'
+            - '.github/workflows/**'
 
   terraform-apply:
     name: 'Terraform Apply'
