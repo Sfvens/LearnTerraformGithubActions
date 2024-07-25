@@ -69,7 +69,7 @@ jobs:
       with:
         terraform_wrapper: false
 
-    # run terraform :)
+    # run terraform
     - name: Terraform Init
       working-directory: ${{ env.workingDirectory }}
       run: terraform init
