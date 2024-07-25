@@ -8,7 +8,7 @@ on:
     - prd
 
 env:
-  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && './terraform/stg' || github.event.pull_request.base.ref == 'stg' && './terraform/stg' || './terraform/prd'}}
+  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && './terraform/stg' || github.event.pull_request.base.ref == 'stg' && './terraform/stg' || './terraform/prd'}} # else block is prd, that's ok because only dev, stg, and prd trigger the workflow
   targetBranch: ${{ github.event.pull_request.base.ref }}
   stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
   prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
@@ -74,18 +74,12 @@ jobs:
     # run terraform
     - name: Terraform Init
       working-directory: ${{ env.workingDirectory }}
-      run: |
-        
-        terraform init
+      run: terraform init
 
     - name: Terraform Format
       working-directory: ${{ env.workingDirectory }}
-      run: |
-        echo ${{ env.workingDirectory }}
-        terraform fmt -recursive -check
+      run: terraform fmt -recursive -check
 
     - name: Terraform Plan
       working-directory: ${{ env.workingDirectory }}
-      run: |
-        env
-        terraform plan
+      run: terraform plan
