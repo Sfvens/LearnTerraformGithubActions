@@ -8,7 +8,7 @@ on:
     - prd
 
 env:
-  workingDirectory: ${{ github.event.pull_request.base.ref == 'dev' && './terraform/stg' || github.event.pull_request.base.ref == 'stg' && './terraform/stg' || './terraform/prd'}} # else block is prd, that's ok because only dev, stg, and prd trigger the workflow
+  workingDirectory: ${{ github.event.pull_request.base.ref == 'prd' && './terraform/prd' || './terraform/stg'}} # else block is stg, that's ok because only dev, stg, and prd trigger the workflow
   targetBranch: ${{ github.event.pull_request.base.ref }}
   stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
   prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
@@ -61,8 +61,6 @@ jobs:
 
     # checkout the repo
     - name: Checkout
-      env:
-        workingDirectory: hello
       uses: actions/checkout@v4
 
     # install terraform
