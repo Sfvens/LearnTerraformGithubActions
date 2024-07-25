@@ -1,9 +1,6 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-# trigger terraform plan :)
 terraform {
   backend "s3" {
-    bucket = "sam-carlsen-terraform-state"
+    bucket = "sam-carlsen-terraform-state-stg"
     key    = "LearnTerraformGithubActions/LearnTerraformGithubActions.tfstate"
     region = "us-west-1"
   }

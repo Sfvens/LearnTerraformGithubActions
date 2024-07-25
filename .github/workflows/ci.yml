@@ -3,7 +3,15 @@ name: CI
 on:
   pull_request:
     branches:
-    - main
+    - dev
+    - stg
+    - prd
+
+env:
+  workingDirectory: ${{ github.event.pull_request.base.ref == 'prd' && './terraform/prd' || './terraform/stg'}} # else block is stg, that's ok because only dev, stg, and prd trigger the workflow
+  targetBranch: ${{ github.event.pull_request.base.ref }}
+  stgRole: arn:aws:iam::851725514822:role/GitHub_Actions
+  prdRole: arn:aws:iam::590183972824:role/GitHub_Actions
 
 jobs:
 
@@ -20,8 +28,7 @@ jobs:
       with:
         filters: | # purposefully exclude README and LICENSE
           terraform:
-            - 'main.tf'
-    
+            - 'terraform/**'
 
   terraform-plan:
     name: 'Terraform Plan'
@@ -36,11 +43,20 @@ jobs:
     steps:
 
     # configure credentials
-    - name: Configure AWS Credentials
+    - name: Configure AWS Credentials (stg)
+      if: ${{ env.targetBranch == 'dev' || env.targetBranch == 'stg' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-west-1
-        role-to-assume: arn:aws:iam::211125428779:role/GitHub_Actions
+        role-to-assume: ${{ env.stgRole }}
+        role-session-name: gha-session
+
+    - name: Configure AWS Credentials (prd)
+      if: ${{ env.targetBranch == 'prd' }}
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: us-west-1
+        role-to-assume: ${{ env.prdRole }}
         role-session-name: gha-session
 
     # checkout the repo
@@ -55,10 +71,13 @@ jobs:
 
     # run terraform
     - name: Terraform Init
+      working-directory: ${{ env.workingDirectory }}
       run: terraform init
 
     - name: Terraform Format
+      working-directory: ${{ env.workingDirectory }}
       run: terraform fmt -recursive -check
 
     - name: Terraform Plan
+      working-directory: ${{ env.workingDirectory }}
       run: terraform plan
