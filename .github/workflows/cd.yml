@@ -25,6 +25,7 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           terraform:
             - 'terraform/**'
+            - 'workflows/**'
 
   terraform-apply:
     name: 'Terraform Apply'
