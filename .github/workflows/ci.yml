@@ -27,7 +27,6 @@ jobs:
         filters: | # purposefully exclude README and LICENSE
           changes:
             - 'terraform/**'
-            - '.github/workflows/**'
 
   terraform-plan:
     name: 'Terraform Plan'
