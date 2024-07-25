@@ -64,6 +64,8 @@ jobs:
 
     # checkout the repo
     - name: Checkout
+      env:
+        workingDirectory: hello
       uses: actions/checkout@v4
 
     # install terraform
